@@ -7,7 +7,7 @@ import { AuthProvider } from './Auth';
 // src/index.js or src/index.tsx
 import 'bootstrap/dist/css/bootstrap.min.css';  // Import Bootstrap CSS
 import 'bootstrap';  // Import Bootstrap JS (includes all JS plugins)
-
+import '@fortawesome/fontawesome-free/css/all.min.css';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

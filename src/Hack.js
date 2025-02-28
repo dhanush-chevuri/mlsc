@@ -503,7 +503,7 @@ function Hack() {
                 description="Create an intelligent system to automatically extract relevant clauses from industrial contracts and verify their compliance with established regulations. The system should highlight missing or non-compliant clauses, generating comprehensive assessment reports."
                 tags={['Python', 'spaCy/NLTK', 'Hugging Face']}
                 teamCount={data.Problems.AI["Intelligent_Contract_Clause_Extraction_and_Compliance_Checker"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("AI", "Intelligent_Contract_Clause_Extraction_and_Compliance_Checker")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -515,7 +515,7 @@ function Hack() {
                 description="Build an AI-powered chatbot to provide real-time technical support for industrial systems. The chatbot should understand user queries, detect urgency based on sentiment, and provide context-aware responses, improving customer satisfaction."
                 tags={['Python', 'Rasa/Dialogflow', 'NLP tools']}
                 teamCount={data.Problems.AI["Real_Time_Technical_Support_Chatbot_for_Industrial_Systems"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("AI", "Real_Time_Technical_Support_Chatbot_for_Industrial_Systems")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -527,7 +527,7 @@ function Hack() {
                 description="Design a system that automatically grades student essays based on content, grammar, style, and originality. The system should provide accurate and consistent scores, freeing up teachers' time and providing students with timely feedback."
                 tags={['Python', 'NLTK/spaCy', 'Scikit-learn']}
                 teamCount={data.Problems.AI["Automated_Grading_of_Student_Essays"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("AI", "Automated_Grading_of_Student_Essays")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -539,7 +539,7 @@ function Hack() {
                 description="Create an AI-powered system that acts as a personalized speech tutor for public speakers by analyzing audio recordings. The system will provide detailed feedback on grammar, vocabulary, fluency, and clarity, while offering targeted recommendations for exercises to improve speech delivery."
                 tags={['Python', 'OpenAI/Whisper', 'PyTorch/TensorFlow']}
                 teamCount={data.Problems.AI["Audio_Based_Speech_Tutor"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("AI", "Audio_Based_Speech_Tutor")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -552,7 +552,7 @@ function Hack() {
                 description="Create a system to recommend personalized education paths for students based on their learning styles, strengths, and career goals. The system should analyze student performance and provide tailored course suggestions."
                 tags={['Python', 'Pandas/NumPy', 'GraphDB/Neo4j']}
                 teamCount={data.Problems.AI["Personalized_Education_Path_Recommendation"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("AI", "Personalized_Education_Path_Recommendation")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -564,7 +564,7 @@ function Hack() {
                 description=" Create an AI chatbot that provides personalized tax assistance to users. The chatbot should answer tax-related questions, guide users through filing procedures, and suggest relevant deductions and credits based on their individual circumstances."
                 tags={['Python', 'Rasa/Dialogflow', 'spaCy/NLTK']}
                 teamCount={data.Problems.AI["AI_Powered_Chatbot_for_Tax_Assistance_and_Personalized_Guidance"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("AI", "AI_Powered_Chatbot_for_Tax_Assistance_and_Personalized_Guidance")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -576,7 +576,7 @@ function Hack() {
                 description="Innovative AI implementations using TensorFlow, PyTorch, OpenCV, or other frameworks to solve domain-specific problems.Integration of AI with IoT, cloud computing, and edge AI for real-time decision-making.User-friendly interfaces for easy adoption in healthcare and farming communities.Scalability and feasibility for large-scale deployments."
                 tags={['Python', 'TensorFlow/PyTorch', 'OpenCV']}
                 teamCount={data.Problems.AI["AI_Driven_Solutions_for_Real_World_Challenges_in_Healthcare_and_Agriculture"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("AI", "AI_Driven_Solutions_for_Real_World_Challenges_in_Healthcare_and_Agriculture")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -588,7 +588,7 @@ function Hack() {
                 description="Design a system that automatically monitors worker compliance with safety gear regulations. This system should use computer vision to detect whether workers are wearing required equipment (helmets, vests, etc.), providing real-time alerts for non-compliance."
                 tags={['Python', ' OpenCV', 'TensorFlow/PyTorch']}
                 teamCount={data.Problems.AI["AI_Powered_Safety_Gear_Compliance_Monitor"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("AI", "AI_Powered_Safety_Gear_Compliance_Monitor")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -679,7 +679,7 @@ function Hack() {
                 description="Security teams struggle to manually analyze logs, making it hard to detect cyber threats in real-time. Build an AI-driven log monitoring system that detects unusual activity, identifies potential attacks, and sends alerts."
                 tags={['Apache Kafka', 'Elasticsearch', 'Grafana']}
                 teamCount={data.Problems.Cybersecurity?.["AI_Log_Monitoring"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("Cybersecurity", "AI_Log_Monitoring")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -692,7 +692,7 @@ function Hack() {
                 description="Many users fall victim to phishing emails because they struggle to identify fraudulent links, fake senders, and malicious attachments. Develop a browser extension or mobile app that scans incoming emails, detects phishing attempts using AI, and warns users before they click on suspicious links."
                 tags={['Apache Kafka', 'Elasticsearch', 'Grafana/Kibana']}
                 teamCount={data.Problems.Cybersecurity?.["Phishing_Detection_Email_Security"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("Cybersecurity", "Phishing_Detection_Email_Security")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -725,7 +725,7 @@ function Hack() {
                 description="SEO optimization is crucial for a blogging platform to achieve visibility. The platform should focus on SEO-friendly features like URLs, meta tags, and server-side rendering."
                 tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
                 teamCount={data.Problems["Web/App Development"]?.["Blogging_Platform_SEO"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("Web/App Development", "Blogging_Platform_SEO")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -738,7 +738,7 @@ function Hack() {
                 description="A stock trading simulation platform should provide real-time data fetching, user authentication, and trading functionalities for a realistic experience."
                 tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
                 teamCount={data.Problems["Web/App Development"]?.["Stock_Trading_Platform"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("Web/App Development", "Stock_Trading_Platform")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -751,7 +751,7 @@ function Hack() {
                 description="Develop an eco-friendly e-commerce platform for buying and selling second-hand goods while promoting sustainability awareness through eco-scores and responsible logistics."
                 tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
                 teamCount={data.Problems["Web/App Development"]?.["Sustainable_ECommerce"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("Web/App Development", "Sustainable_ECommerce")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -764,7 +764,7 @@ function Hack() {
                 description="Tracking fitness activities helps users stay motivated and reach their health goals. The application should monitor various activities and offer data visualization."
                 tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
                 teamCount={data.Problems["Web/App Development"]?.["Fitness_Tracker"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("Web/App Development", "Fitness_Tracker")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -777,7 +777,7 @@ function Hack() {
                 description="Integrating a payment gateway involves handling transactions securely while providing a smooth user experience during the checkout process."
                 tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
                 teamCount={data.Problems["Web/App Development"]?.["Payment_Gateway_Integration"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("Web/App Development", "Payment_Gateway_Integration")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -790,7 +790,7 @@ function Hack() {
                 description="Intuitive calendar view for adding events, scheduling meetings, and reminders. Handling recurring events, time zone adjustments, and notifications."
                 tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
                 teamCount={data.Problems["Web/App Development"]?.["Calendar_Scheduling_System"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("Web/App Development", "Calendar_Scheduling_System")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -803,7 +803,7 @@ function Hack() {
                 description="Managing and sharing long URLs can be inconvenient and cluttered. A URL shortener service reduces the length of URLs while maintaining redirection to the original destination, enabling better management, sharing, and analytics."
                 tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
                 teamCount={data.Problems["Web/App Development"]?.["URL_Shortener"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("Web/App Development", "URL_Shortener")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -816,7 +816,7 @@ function Hack() {
                 description="A blogging platform allows users to write, comment, and interact with posts,necessitating both user-friendly front-end and scalable back-end development."
                 tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
                 teamCount={data.Problems["Web/App Development"]?.["Create_a _logging_Platform"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("Web/App Development", "Create_a _logging_Platform")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
@@ -829,7 +829,7 @@ function Hack() {
                 description="Develop an eco-friendly e-commerce platform for buying and selling second-hand goods while promoting sustainability awareness through eco-scores and responsible logistics."
                 tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
                 teamCount={data.Problems["Web/App Development"]?.["Sustainable_E_Commerce_for_Second_Hand_Goods"]?.teamCount || 0}
-                maxTeams={3}
+                maxTeams={2}
                 onSelect={() => handleSelectProblem("Web/App Development", "Sustainable_E_Commerce_for_Second_Hand_Goods")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
