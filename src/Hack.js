@@ -581,6 +581,18 @@ function Hack() {
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
               />
+              <EnhancedProblemCard
+                category="AI"
+                problemId="AI-Powered Safety Gear Compliance Monitor"
+                title="AI-Powered Safety Gear Compliance Monitor"
+                description="Design a system that automatically monitors worker compliance with safety gear regulations. This system should use computer vision to detect whether workers are wearing required equipment (helmets, vests, etc.), providing real-time alerts for non-compliance."
+                tags={['Python', ' OpenCV', 'TensorFlow/PyTorch']}
+                teamCount={data.Problems.AI["02VI"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("AI", "02VI")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
               {/* Add remaining problem cards in this section */}
             </div>
           </div>
@@ -793,6 +805,32 @@ function Hack() {
                 teamCount={data.Problems["Web/App Development"]?.["URL_Shortener"]?.teamCount || 0}
                 maxTeams={3}
                 onSelect={() => handleSelectProblem("Web/App Development", "URL_Shortener")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
+              <EnhancedProblemCard
+                category="Web/App Development"
+                problemId="Create a Blogging Platform"
+                title="Create a Blogging Platform"
+                description="A blogging platform allows users to write, comment, and interact with posts,necessitating both user-friendly front-end and scalable back-end development."
+                tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
+                teamCount={data.Problems["Web/App Development"]?.["01RCW"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("Web/App Development", "01RCW")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
+              <EnhancedProblemCard
+                category="Web/App Development"
+                problemId="Sustainable E-Commerce for Second-Hand Goods"
+                title="Sustainable E-Commerce for Second-Hand Goods"
+                description="Develop an eco-friendly e-commerce platform for buying and selling second-hand goods while promoting sustainability awareness through eco-scores and responsible logistics."
+                tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
+                teamCount={data.Problems["Web/App Development"]?.["01RCW"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("Web/App Development", "01RCW")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
               />
