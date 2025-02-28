@@ -3,13 +3,13 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/
 import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCY915zeWHufwHq9Gj6WTBaP98-YAT7H60",
-  authDomain: "temp-5941e.firebaseapp.com",
-  projectId: "temp-5941e",
-  storageBucket: "temp-5941e.firebasestorage.app",
-  messagingSenderId: "796016176089",
-  appId: "1:796016176089:web:0f50e4d7fe28e7e988c7c8",
-  measurementId: "G-9DKY1GBFMY"
+  apiKey: "AIzaSyBuiVTulfbpjEwP-pg8GhJhdkFGSDqnOfk",
+  authDomain: "hackxcelerate2k25.firebaseapp.com",
+  projectId: "hackxcelerate2k25",
+  storageBucket: "hackxcelerate2k25.firebasestorage.app",
+  messagingSenderId: "863579080766",
+  appId: "1:863579080766:web:869c4f91053ef3aa0da96f",
+  measurementId: "G-M0GBETDC4H"
 };
 
 // Initialize Firebase app (only if it hasn't been initialized yet)
