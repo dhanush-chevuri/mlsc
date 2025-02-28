@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/mlsc/static/css/main.60dd8210.css",
+    "main.js": "/mlsc/static/js/main.879c7a1b.js",
+    "static/js/453.5fdebebf.chunk.js": "/mlsc/static/js/453.5fdebebf.chunk.js",
+    "static/media/fa-solid-900.ttf": "/mlsc/static/media/fa-solid-900.2582b0e4bcf85eceead0.ttf",
+    "static/media/fa-brands-400.ttf": "/mlsc/static/media/fa-brands-400.1815e00441357e01619e.ttf",
+    "static/media/fa-solid-900.woff2": "/mlsc/static/media/fa-solid-900.2463b90d9a316e4e5294.woff2",
+    "static/media/fa-brands-400.woff2": "/mlsc/static/media/fa-brands-400.c210719e60948b211a12.woff2",
+    "static/media/fa-regular-400.ttf": "/mlsc/static/media/fa-regular-400.914997e1bdfc990d0897.ttf",
+    "static/media/Picture1.png": "/mlsc/static/media/Picture1.de00802432a6253f1dca.png",
+    "static/media/fa-regular-400.woff2": "/mlsc/static/media/fa-regular-400.89999bdf5d835c012025.woff2",
+    "static/media/k7.png": "/mlsc/static/media/k7.026f7d5ab3af59ff12b0.png",
+    "static/media/mlsckare_logo.jpeg": "/mlsc/static/media/mlsckare_logo.c80f8268c50ead73adb1.jpeg",
+    "static/media/fa-v4compatibility.ttf": "/mlsc/static/media/fa-v4compatibility.da94ef451f4969af06e6.ttf",
+    "static/media/download.jpeg": "/mlsc/static/media/download.50e6b72e93c3ead5eced.jpeg",
+    "static/media/fa-v4compatibility.woff2": "/mlsc/static/media/fa-v4compatibility.ea8f94e1d22e0d35ccd4.woff2",
+    "index.html": "/mlsc/index.html",
+    "main.60dd8210.css.map": "/mlsc/static/css/main.60dd8210.css.map",
+    "main.879c7a1b.js.map": "/mlsc/static/js/main.879c7a1b.js.map",
+    "453.5fdebebf.chunk.js.map": "/mlsc/static/js/453.5fdebebf.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.60dd8210.css",
+    "static/js/main.879c7a1b.js"
+  ]
+}
