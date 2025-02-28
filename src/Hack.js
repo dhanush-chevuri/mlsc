@@ -5,13 +5,14 @@ import mlsc from "./assets/mlsckare_logo.jpeg";
 import mlsa from "./assets/Picture1.png";
 import k7 from "./assets/k7.png";
 
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Toast, ToastContainer } from "react-bootstrap";
 
 import { AuthContext } from './Auth';
 
 import { ref, get, update, serverTimestamp, onValue } from "firebase/database";
 
 import { database } from './firebase';
+
 
 function Hack() {
   const [selectedCount, setSelectedCount] = useState(0);
@@ -27,7 +28,17 @@ function Hack() {
   const [showModal, setShowModal] = useState(false);
   const [showSignInModal, setShowSignInModal] = useState(false);
 
-  const { user, signInWithGoogle , logOut } = useContext(AuthContext);
+  // Toast state
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
+  const { user, signInWithGoogle, logOut } = useContext(AuthContext);
   const [data, setData] = useState({
     Problems: {
       AI: {},
@@ -74,7 +85,7 @@ function Hack() {
     }
 
     const userSelectionsRef = ref(database, `UserSelections/${user.uid}`);
-    
+
     // Set up listener
     const unsubscribe = onValue(userSelectionsRef, (snapshot) => {
       if (snapshot.exists()) {
@@ -85,7 +96,7 @@ function Hack() {
         setUserSelection(null);
       }
     });
-    
+
     // Clean up listener
     return () => unsubscribe();
   }, [user]);
@@ -131,50 +142,53 @@ function Hack() {
       setShowSignInModal(true);
       return;
     }
-    
+
     // Reference to the problem in Firebase
     const problemRef = ref(database, `Problems/${category}/${problemId}`);
     const userSelectionsRef = ref(database, `UserSelections/${user.uid}`);
-    
+
     try {
       // Check if problem exists and isn't full
       const problemSnapshot = await get(problemRef);
-      
+
       if (!problemSnapshot.exists()) {
         setErrorMessage("Problem statement not found.");
         return;
       }
-      
+
       const problemData = problemSnapshot.val();
       const teamCount = problemData.teamCount || 0;
-      const maxTeams = problemData.maxTeams || 3; // Default max teams
-      
+      const maxTeams = problemData.maxTeams || 2; // Default max teams
+
       if (teamCount >= maxTeams) {
         setWarningMessage("This problem statement has reached its maximum number of teams.");
         return;
       }
-      
+
       // Check if user has already selected a problem
       const userSelectionsSnapshot = await get(userSelectionsRef);
-      
+
       if (userSelectionsSnapshot.exists()) {
         const userSelection = userSelectionsSnapshot.val();
-        
+
+        // Set toast message and show it
+        setToastMessage("Please deselect your current problem first before selecting a new one.");
+        setShowToast(true);
+
+        // Check if it's the same problem
         if (userSelection.problemId === problemId && userSelection.category === category) {
           setInfoMessage("You have already selected this problem statement.");
-          return;
-        } else {
-          setWarningMessage("You can only select one problem statement at a time. Please deselect your current problem first.");
-          return;
         }
+
+        return;
       }
-      
+
       // Create updates object for transaction
       const updates = {};
-      
+
       // Increment team count for the problem
       updates[`Problems/${category}/${problemId}/teamCount`] = teamCount + 1;
-      
+
       // Record user's selection
       updates[`UserSelections/${user.uid}`] = {
         problemId,
@@ -183,16 +197,16 @@ function Hack() {
         teamName: user.displayName || "Unnamed Team",
         teamEmail: user.email
       };
-      
+
       // Add user to the problem's selected teams
       updates[`Problems/${category}/${problemId}/selectedTeams/${user.uid}`] = {
         teamName: user.displayName || "Unnamed Team",
         selectedAt: serverTimestamp()
       };
-      
+
       // Perform the update transaction
       await update(ref(database), updates);
-      
+
       setInfoMessage("You have successfully selected this problem statement.");
     } catch (error) {
       console.error("Error selecting problem:", error);
@@ -200,37 +214,48 @@ function Hack() {
     }
   };
 
+
+
   // Function to deselect a problem
   const deselectProblem = async () => {
+    setShowModal(true);
+  };
+
+  // Function to deselect a problem
+  const handledeselectProblem = async () => {
     if (!user || !userSelection) return;
-    
+
+    setShowModal(false);
+
     try {
       const { category, problemId } = userSelection;
-      
+
       // Get current problem data
       const problemRef = ref(database, `Problems/${category}/${problemId}`);
       const problemSnapshot = await get(problemRef);
-      
+
       // Create updates object for transaction
       const updates = {};
-      
+
       if (problemSnapshot.exists()) {
         const problemData = problemSnapshot.val();
         const teamCount = problemData.teamCount || 0;
-        
+
         // Decrement team count
         updates[`Problems/${category}/${problemId}/teamCount`] = Math.max(0, teamCount - 1);
         // Remove user from problem's selected teams
         updates[`Problems/${category}/${problemId}/selectedTeams/${user.uid}`] = null;
       }
-      
+
       // Remove user's selection
       updates[`UserSelections/${user.uid}`] = null;
-      
+
       // Perform the update transaction
       await update(ref(database), updates);
-      
+
+
       setInfoMessage("You have deselected the problem statement.");
+
     } catch (error) {
       console.error("Error deselecting problem:", error);
       setErrorMessage("Failed to deselect problem. Please try again.");
@@ -275,8 +300,8 @@ function Hack() {
   };
 
   const enterFullscreen = () => {
-    // Implementation for fullscreen if needed
-    setShowModal(false);
+    // Call the actual deselect function
+    handledeselectProblem();
   };
 
   if (loading) {
@@ -312,8 +337,8 @@ function Hack() {
             <span className="logo-text-hack">Hack</span>
             <span className="logo-text-xcelerate">Xcelerate</span>
           </a>
-          <button 
-            className="menu-toggle" 
+          <button
+            className="menu-toggle"
             onClick={() => setNavActive(!navActive)}
           >
             <i className="fas fa-bars"></i>
@@ -321,26 +346,35 @@ function Hack() {
           <div className={`nav-links ${navActive ? 'active' : ''}`}>
             <a href="#domains">Domains</a>
             <a href="#problems">Problems</a>
-            {
-              user ? (
-                <div className="user-info">
-                  <span>{user.displayName}</span>
+            {user ? (
+              <div className="user-info dropdown">
+                <Button
+                  className="btn btn-primary dropdown-toggle"
+                  id="userDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  {user.displayName}
+                </Button>
+                <ul className="dropdown-menu" aria-labelledby="userDropdown">
+                  <li>
+                    <Button className="dropdown-item" onClick={logOut}>Logout</Button>
+                  </li>
                   {userSelection && (
-                    <>
-                    <Button className="deselect-btn" onClick={deselectProblem}>
-                      Deselect Problem
-                    </Button>
-
-                    <Button onClick={ logOut }  >Logout</Button>
-
-                    </>
-                    
+                    <li>
+                      <Button className="dropdown-item" onClick={deselectProblem}>
+                        Deselect Problem
+                      </Button>
+                    </li>
                   )}
-                </div>
-              ) : (
-                <Button onClick={() => setShowSignInModal(true)}>Sign in</Button>
-              )
-            }
+                </ul>
+              </div>
+            ) : (
+              <Button className="btn btn-primary" onClick={() => setShowSignInModal(true)}>
+                Sign in
+              </Button>
+            )}
+
           </div>
         </nav>
       </header>
@@ -393,7 +427,7 @@ function Hack() {
         <section id="domains">
           <div className="filter-container">
             <div className="filter-group">
-              <button 
+              <button
                 className={`filter-btn ${activeFilter === 'all' ? 'active' : ''}`}
                 onClick={() => setActiveFilter('all')}
               >
@@ -403,25 +437,25 @@ function Hack() {
           </div>
 
           <div className="domains-grid">
-            <DomainCard 
+            <DomainCard
               title="AI & Machine Learning"
               description="Solve complex problems using artificial intelligence, deep learning, and machine learning techniques to create next-generation solutions."
               problemCount={aiCount}
               category="ai-ml"
             />
-            <DomainCard 
+            <DomainCard
               title="Data Science"
               description="Extract insights and knowledge from structured and unstructured data through various scientific methods, processes, algorithms, and systems."
               problemCount={dataCount}
               category="data-science"
             />
-            <DomainCard 
+            <DomainCard
               title="Cybersecurity"
               description="Develop innovative solutions to protect systems, networks, and programs from digital attacks and ensure data privacy and security."
               problemCount={securityCount}
               category="cybersecurity"
             />
-            <DomainCard 
+            <DomainCard
               title="Web/App Development"
               description="Create innovative web applications and mobile apps that solve real-world problems and provide seamless user experiences."
               problemCount={webCount}
@@ -438,24 +472,109 @@ function Hack() {
           <div id="ai-ml-problems">
             <h3>AI & Machine Learning</h3>
             <div className="problems-list">
-              <EnhancedProblemCard 
+              <EnhancedProblemCard
                 category="AI"
-                problemId="01VQ"
+                problemId="Advanced_Visual_Quality_Control_in_Manufacturing"
                 title="Advanced Visual Quality Control in Manufacturing"
                 description="Develop an automated visual inspection system to detect subtle defects in manufacturing lines. This system should improve accuracy, reduce waste, and increase the speed of quality control compared to manual methods."
                 tags={['Python', 'TensorFlow/PyTorch', 'OpenCV']}
-                teamCount={data.Problems.AI["01VQ"]?.teamCount || 0}
-                maxTeams={3}
-                onSelect={() => handleSelectProblem("AI", "01VQ")}
+                teamCount={data.Problems.AI["Advanced_Visual_Quality_Control_in_Manufacturing"]?.teamCount || 0}
+                maxTeams={2}
+                onSelect={() => handleSelectProblem("AI", "Advanced_Visual_Quality_Control_in_Manufacturing")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
               />
-              <EnhancedProblemCard 
+              <EnhancedProblemCard
                 category="AI"
-                problemId="02VI"
+                problemId="Automated_Visual_Inspection_for_Component_Assembly"
                 title="Automated Visual Inspection for Component Assembly"
                 description="Create an automated system that visually inspects component assembly on a production line. This system should verify the presence and correct placement of parts, flagging misassemblies and missing components in real time to minimize errors."
                 tags={['Python', 'YOLOv5/v8P', 'OpenCV']}
+                teamCount={data.Problems.AI["Automated_Visual_Inspection_for_Component_Assembly"]?.teamCount || 0}
+                maxTeams={2}
+                onSelect={() => handleSelectProblem("AI", "Automated_Visual_Inspection_for_Component_Assembly")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+              <EnhancedProblemCard
+                category="AI"
+                problemId="Intelligent_Contract_Clause_Extraction_and_Compliance_Checker"
+                title="Intelligent Contract Clause Extraction and Compliance Checker"
+                description="Create an intelligent system to automatically extract relevant clauses from industrial contracts and verify their compliance with established regulations. The system should highlight missing or non-compliant clauses, generating comprehensive assessment reports."
+                tags={['Python', 'spaCy/NLTK', 'Hugging Face']}
+                teamCount={data.Problems.AI["Intelligent_Contract_Clause_Extraction_and_Compliance_Checker"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("AI", "Intelligent_Contract_Clause_Extraction_and_Compliance_Checker")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+              <EnhancedProblemCard
+                category="AI"
+                problemId="Real_Time_Technical_Support_Chatbot_for_Industrial_Systems"
+                title="Real-Time Technical Support Chatbot for Industrial Systems"
+                description="Build an AI-powered chatbot to provide real-time technical support for industrial systems. The chatbot should understand user queries, detect urgency based on sentiment, and provide context-aware responses, improving customer satisfaction."
+                tags={['Python', 'Rasa/Dialogflow', 'NLP tools']}
+                teamCount={data.Problems.AI["Real_Time_Technical_Support_Chatbot_for_Industrial_Systems"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("AI", "Real_Time_Technical_Support_Chatbot_for_Industrial_Systems")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+              <EnhancedProblemCard
+                category="AI"
+                problemId="Automated_Grading_of_Student_Essays"
+                title="Automated Grading of Student Essays Using Advanced NLP and Machine Learning"
+                description="Design a system that automatically grades student essays based on content, grammar, style, and originality. The system should provide accurate and consistent scores, freeing up teachers' time and providing students with timely feedback."
+                tags={['Python', 'NLTK/spaCy', 'Scikit-learn']}
+                teamCount={data.Problems.AI["Automated_Grading_of_Student_Essays"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("AI", "Automated_Grading_of_Student_Essays")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+              <EnhancedProblemCard
+                category="AI"
+                problemId="Audio_Based_Speech_Tutor"
+                title="Audio-Based Speech Tutor"
+                description="Create an AI-powered system that acts as a personalized speech tutor for public speakers by analyzing audio recordings. The system will provide detailed feedback on grammar, vocabulary, fluency, and clarity, while offering targeted recommendations for exercises to improve speech delivery."
+                tags={['Python', 'OpenAI/Whisper', 'PyTorch/TensorFlow']}
+                teamCount={data.Problems.AI["Audio_Based_Speech_Tutor"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("AI", "Audio_Based_Speech_Tutor")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
+              <EnhancedProblemCard
+                category="AI"
+                problemId="Personalized Education Path Recommendation"
+                title="Personalized Education Path Recommendation"
+                description="Create a system to recommend personalized education paths for students based on their learning styles, strengths, and career goals. The system should analyze student performance and provide tailored course suggestions."
+                tags={['Python', 'Pandas/NumPy', 'GraphDB/Neo4j']}
+                teamCount={data.Problems.AI["02VI"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("AI", "02VI")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+              <EnhancedProblemCard
+                category="AI"
+                problemId="AI-Powered Chatbot for Tax Assistance and Personalized Guidance"
+                title="AI-Powered Chatbot for Tax Assistance and Personalized Guidance"
+                description=" Create an AI chatbot that provides personalized tax assistance to users. The chatbot should answer tax-related questions, guide users through filing procedures, and suggest relevant deductions and credits based on their individual circumstances."
+                tags={['Python', 'Rasa/Dialogflow', 'spaCy/NLTK']}
+                teamCount={data.Problems.AI["02VI"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("AI", "02VI")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+              <EnhancedProblemCard
+                category="AI"
+                problemId="AI-Driven Solutions for Real-World Challenges in Healthcare and Agriculture"
+                title="AI-Driven Solutions for Real-World Challenges in Healthcare and Agriculture"
+                description="Innovative AI implementations using TensorFlow, PyTorch, OpenCV, or other frameworks to solve domain-specific problems.Integration of AI with IoT, cloud computing, and edge AI for real-time decision-making.User-friendly interfaces for easy adoption in healthcare and farming communities.Scalability and feasibility for large-scale deployments."
+                tags={['Python', 'TensorFlow/PyTorch', 'OpenCV']}
                 teamCount={data.Problems.AI["02VI"]?.teamCount || 0}
                 maxTeams={3}
                 onSelect={() => handleSelectProblem("AI", "02VI")}
@@ -469,18 +588,58 @@ function Hack() {
           <div id="data-science-problems">
             <h3>Data Science</h3>
             <div className="problems-list">
-              <EnhancedProblemCard 
+              <EnhancedProblemCard
                 category="Data Science"
-                problemId="01CTD"
+                problemId="Cybersecurity_Threat_Detection"
                 title="Cybersecurity Threat Detection in Network Logs"
                 description="Develop a system to detect and prevent cybersecurity threats by analyzing network logs in real-time. The system should identify malicious activity like DDoS attacks and phishing attempts, automatically blocking malicious IPs and preventing security breaches."
                 tags={['Python', 'Pandas/NumPy/Scikit-learn', 'ELK stack']}
-                teamCount={data.Problems["Data Science"]?.["01CTD"]?.teamCount || 0}
+                teamCount={data.Problems["Data Science"]?.["Cybersecurity_Threat_Detection"]?.teamCount || 0}
                 maxTeams={4}
-                onSelect={() => handleSelectProblem("Data Science", "01CTD")}
+                onSelect={() => handleSelectProblem("Data Science", "Cybersecurity_Threat_Detection")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
               />
+
+              <EnhancedProblemCard
+                category="Data Science"
+                problemId="Energy_Consumption_Optimization"
+                title="Energy Consumption Optimization in Manufacturing"
+                description="Develop a system to predict and optimize energy consumption in a manufacturing facility. This involves forecasting short-term energy demand, identifying periods of excessive usage, and suggesting corrective actions to reduce waste and costs."
+                tags={['Python/R', 'Prophet/ARIMA', 'Pandas/NumPy']}
+                teamCount={data.Problems["Data Science"]?.["Energy_Consumption_Optimization"]?.teamCount || 0}
+                maxTeams={4}
+                onSelect={() => handleSelectProblem("Data Science", "Energy_Consumption_Optimization")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
+              <EnhancedProblemCard
+                category="Data Science"
+                problemId="Customer_Retention_Prediction"
+                title="Customer Retention Prediction and Optimization Platform"
+                description="Create a platform to predict customer churn and provide actionable insights for improving retention. This involves identifying key factors that influence customer disengagement and generating personalized engagement strategies to reduce churn."
+                tags={['Python/R', 'Pandas/NumPy', 'Streamlit/Tableau']}
+                teamCount={data.Problems["Data Science"]?.["Customer_Retention_Prediction"]?.teamCount || 0}
+                maxTeams={4}
+                onSelect={() => handleSelectProblem("Data Science", "Customer_Retention_Prediction")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
+              <EnhancedProblemCard
+                category="Data Science"
+                problemId="AI_Fake_Research_Detection"
+                title="AI-Driven Fake Scientific Research Detection"
+                description="Develop an AI-driven system to detect fraudulent scientific studies and AI-generated content. The system should analyze research papers, identify plagiarism, detect citation anomalies, and assign credibility scores to ensure research integrity."
+                tags={['Python', 'spaCy/NLTK', 'SciPy']}
+                teamCount={data.Problems["Data Science"]?.["AI_Fake_Research_Detection"]?.teamCount || 0}
+                maxTeams={4}
+                onSelect={() => handleSelectProblem("Data Science", "AI_Fake_Research_Detection")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
               {/* Add remaining problem cards in this section */}
             </div>
           </div>
@@ -488,37 +647,156 @@ function Hack() {
           <div id="cybersecurity-problems">
             <h3>Cybersecurity</h3>
             <div className="problems-list">
-              <EnhancedProblemCard 
+              <EnhancedProblemCard
                 category="Cybersecurity"
-                problemId="01SFS"
+                problemId="Secure_File_Sharing_System"
                 title="Secure File Sharing System with Threat Detection"
                 description="Traditional file-sharing methods lack strong encryption and real-time security, making them vulnerable to data breaches. Develop a secure file-sharing system that ensures encrypted transfers, detects unauthorized access, and alerts users of potential threats."
                 tags={['Node.js/Python', 'PostgreSQL/Firebase', 'AES-256 encryption']}
-                teamCount={data.Problems.Cybersecurity?.["01SFS"]?.teamCount || 0}
-                maxTeams={3}
-                onSelect={() => handleSelectProblem("Cybersecurity", "01SFS")}
+                teamCount={data.Problems.Cybersecurity?.["Secure_File_Sharing_System"]?.teamCount || 0}
+                maxTeams={2}
+                onSelect={() => handleSelectProblem("Cybersecurity", "Secure_File_Sharing_System")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
               />
+
+              <EnhancedProblemCard
+                category="Cybersecurity"
+                problemId="AI_Log_Monitoring"
+                title="AI-Powered Log Monitoring for Cyber Threats"
+                description="Security teams struggle to manually analyze logs, making it hard to detect cyber threats in real-time. Build an AI-driven log monitoring system that detects unusual activity, identifies potential attacks, and sends alerts."
+                tags={['Apache Kafka', 'Elasticsearch', 'Grafana']}
+                teamCount={data.Problems.Cybersecurity?.["AI_Log_Monitoring"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("Cybersecurity", "AI_Log_Monitoring")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
+              <EnhancedProblemCard
+                category="Cybersecurity"
+                problemId="Phishing_Detection_Email_Security"
+                title="Phishing Detection & Email Security Assistant"
+                description="Many users fall victim to phishing emails because they struggle to identify fraudulent links, fake senders, and malicious attachments. Develop a browser extension or mobile app that scans incoming emails, detects phishing attempts using AI, and warns users before they click on suspicious links."
+                tags={['Apache Kafka', 'Elasticsearch', 'Grafana/Kibana']}
+                teamCount={data.Problems.Cybersecurity?.["Phishing_Detection_Email_Security"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("Cybersecurity", "Phishing_Detection_Email_Security")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
               {/* Add remaining problem cards in this section */}
             </div>
           </div>
-          
+
           <div id="Web/App Development">
             <h3>Web/App Development</h3>
             <div className="problems-list">
-              <EnhancedProblemCard 
+              <EnhancedProblemCard
                 category="Web/App Development"
-                problemId="01RCW"
+                problemId="Real_Time_Collaborative_Whiteboard"
                 title="Real-Time Collaborative Whiteboard"
                 description="Create a real-time collaborative whiteboard using WebSockets. Multiple users can collaboratively draw, add sticky notes, and chat. Develop a real-time, multi-user collaborative whiteboard that enables teams and educators to brainstorm, teach, and work together efficiently without lag."
                 tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
-                teamCount={data.Problems["Web/App Development"]?.["01RCW"]?.teamCount || 0}
-                maxTeams={3}
-                onSelect={() => handleSelectProblem("Web/App Development", "01RCW")}
+                teamCount={data.Problems["Web/App Development"]?.["Real_Time_Collaborative_Whiteboard"]?.teamCount || 0}
+                maxTeams={2}
+                onSelect={() => handleSelectProblem("Web/App Development", "Real_Time_Collaborative_Whiteboard")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
               />
+
+              <EnhancedProblemCard
+                category="Web/App Development"
+                problemId="Blogging_Platform_SEO"
+                title="Build a Simple Blogging Platform with SEO Optimization"
+                description="SEO optimization is crucial for a blogging platform to achieve visibility. The platform should focus on SEO-friendly features like URLs, meta tags, and server-side rendering."
+                tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
+                teamCount={data.Problems["Web/App Development"]?.["Blogging_Platform_SEO"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("Web/App Development", "Blogging_Platform_SEO")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
+              <EnhancedProblemCard
+                category="Web/App Development"
+                problemId="Stock_Trading_Platform"
+                title="Build a Stock Trading Platform"
+                description="A stock trading simulation platform should provide real-time data fetching, user authentication, and trading functionalities for a realistic experience."
+                tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
+                teamCount={data.Problems["Web/App Development"]?.["Stock_Trading_Platform"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("Web/App Development", "Stock_Trading_Platform")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
+              <EnhancedProblemCard
+                category="Web/App Development"
+                problemId="Sustainable_ECommerce"
+                title="Sustainable E-Commerce for Second-Hand Goods"
+                description="Develop an eco-friendly e-commerce platform for buying and selling second-hand goods while promoting sustainability awareness through eco-scores and responsible logistics."
+                tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
+                teamCount={data.Problems["Web/App Development"]?.["Sustainable_ECommerce"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("Web/App Development", "Sustainable_ECommerce")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
+              <EnhancedProblemCard
+                category="Web/App Development"
+                problemId="Fitness_Tracker"
+                title="Create a Fitness Tracker"
+                description="Tracking fitness activities helps users stay motivated and reach their health goals. The application should monitor various activities and offer data visualization."
+                tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
+                teamCount={data.Problems["Web/App Development"]?.["Fitness_Tracker"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("Web/App Development", "Fitness_Tracker")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
+              <EnhancedProblemCard
+                category="Web/App Development"
+                problemId="Payment_Gateway_Integration"
+                title="Design a Payment Gateway Integration"
+                description="Integrating a payment gateway involves handling transactions securely while providing a smooth user experience during the checkout process."
+                tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
+                teamCount={data.Problems["Web/App Development"]?.["Payment_Gateway_Integration"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("Web/App Development", "Payment_Gateway_Integration")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
+              <EnhancedProblemCard
+                category="Web/App Development"
+                problemId="Calendar_Scheduling_System"
+                title="Calendar Scheduling System"
+                description="Intuitive calendar view for adding events, scheduling meetings, and reminders. Handling recurring events, time zone adjustments, and notifications."
+                tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
+                teamCount={data.Problems["Web/App Development"]?.["Calendar_Scheduling_System"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("Web/App Development", "Calendar_Scheduling_System")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
+              <EnhancedProblemCard
+                category="Web/App Development"
+                problemId="URL_Shortener"
+                title="Design a URL Shortener Service"
+                description="Managing and sharing long URLs can be inconvenient and cluttered. A URL shortener service reduces the length of URLs while maintaining redirection to the original destination, enabling better management, sharing, and analytics."
+                tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
+                teamCount={data.Problems["Web/App Development"]?.["URL_Shortener"]?.teamCount || 0}
+                maxTeams={3}
+                onSelect={() => handleSelectProblem("Web/App Development", "URL_Shortener")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
               {/* Add remaining problem cards in this section */}
             </div>
           </div>
@@ -541,6 +819,27 @@ function Hack() {
         </div>
       </footer>
 
+      {/* Toast Container - positioned with higher z-index */}
+      <ToastContainer
+        position="top-end"
+        className="p-3"
+        style={{ zIndex: 1070 }}
+      >
+        <Toast
+          onClose={() => setShowToast(false)}
+          show={showToast}
+          delay={5000}
+          autohide
+          bg="warning"
+        >
+          <Toast.Header>
+            <strong className="me-auto">Action Required</strong>
+            <small>just now</small>
+          </Toast.Header>
+          <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
+
       {/* Sign In Modal */}
       <Modal show={showSignInModal} onHide={() => setShowSignInModal(false)}>
         <Modal.Header closeButton>
@@ -557,18 +856,18 @@ function Hack() {
         </Modal.Footer>
       </Modal>
 
-      {/* Other Modal */}
+      {/* Deselect Confirmation Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Are you sure you want the test?</Modal.Body>
+        <Modal.Body>Unselect Current Problem Statement?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             Cancel
           </Button>
           <Button variant="danger" onClick={enterFullscreen}>
-            Start Exam
+            Unselect
           </Button>
         </Modal.Footer>
       </Modal>
@@ -600,24 +899,24 @@ function DomainCard({ title, description, problemCount, category }) {
 }
 
 // Enhanced Problem Card with Firebase integration
-function EnhancedProblemCard({ 
-  category, 
-  problemId, 
-  title, 
-  description, 
-  tags, 
-  teamCount = 0, 
-  maxTeams = 3, 
-  onSelect, 
-  onDeselect, 
-  userSelection 
+function EnhancedProblemCard({
+  category,
+  problemId,
+  title,
+  description,
+  tags,
+  teamCount = 0,
+  maxTeams = 2,
+  onSelect,
+  onDeselect,
+  userSelection
 }) {
-  const isSelected = userSelection && 
-                     userSelection.category === category && 
-                     userSelection.problemId === problemId;
-  
+  const isSelected = userSelection &&
+    userSelection.category === category &&
+    userSelection.problemId === problemId;
+
   const isFull = teamCount >= maxTeams && !isSelected;
-  
+
   const cardClass = `problem-card ${isSelected ? 'selected' : ''} ${isFull ? 'full' : ''}`;
   const buttonClass = `select-btn ${isSelected ? 'selected' : ''} ${isFull ? 'full' : ''}`;
   const buttonText = isSelected ? 'Selected' : isFull ? 'Full' : 'Select';
@@ -648,9 +947,9 @@ function EnhancedProblemCard({
           <i className="fas fa-users"></i> {teamCount} teams working on this
           {maxTeams && <span className="max-teams"> (max: {maxTeams})</span>}
         </div>
-        <button 
-          className={buttonClass} 
-          onClick={handleClick} 
+        <button
+          className={buttonClass}
+          onClick={handleClick}
           disabled={isFull && !isSelected}
         >
           {buttonText}
@@ -755,6 +1054,14 @@ const additionalStyles = `
 .select-btn.full:not(.selected) {
   background-color: #9e9e9e;
   cursor: not-allowed;
+}
+
+/* Toast styling */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
 }
 `;
 
