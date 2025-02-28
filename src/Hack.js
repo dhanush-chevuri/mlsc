@@ -5,6 +5,8 @@ import mlsc from "./assets/mlsckare_logo.jpeg";
 import mlsa from "./assets/Picture1.png";
 import k7 from "./assets/k7.png";
 
+import LoadingScreen from "./LoadingScreen";
+
 import { Modal, Button, Toast, ToastContainer } from "react-bootstrap";
 
 import { AuthContext } from './Auth';
@@ -12,6 +14,25 @@ import { AuthContext } from './Auth';
 import { ref, get, update, serverTimestamp, onValue } from "firebase/database";
 
 import { database } from './firebase';
+
+
+const emails = [
+  "99220040951@klu.ac.in", "99220041552@klu.ac.in", "99220041528@klu.ac.in", "99220041077@klu.ac.in",
+  "99220042003@klu.ac.in", "99220041744@klu.ac.in", "99210041388@klu.ac.in", "99220042007@klu.ac.in",
+  "99220040634@klu.ac.in", "99230040943@klu.ac.in", "9922005030@klu.ac.in", "99220041418@klu.ac.in",
+  "99220041932@klu.ac.in", "9921004791@klu.ac.in", "99210041567@klu.ac.in", "99220041349@klu.ac.in",
+  "9823005024@klu.ac.in", "99220042083@klu.ac.in", "99220040397@klu.ac.in", "99230040501@klu.ac.in",
+  "99220041567@klu.ac.in", "99220041319@klu.ac.in", "99220041466@klu.ac.in", "99230040729@klu.ac.in",
+  "99220041121@klu.ac.in", "99220040560@klu.ac.in", "9923030006@klu.ac.in", "99220041538@klu.ac.in",
+  "9921004148@klu.ac.in", "99220041853@klu.ac.in", "9922005254@klu.ac.in", "98240040003@klu.ac.in",
+  "99220041376@klu.ac.in", "9922005321@klu.ac.in", "99220042009@klu.ac.in", "9922005047@klu.ac.in",
+  "9921004111@klu.ac.in", "99220040339@klu.ac.in", "99220041620@klu.ac.in", "99230040633@klu.ac.in",
+  "99230040774@klu.ac.in", "99220041274@klu.ac.in", "99210041212@klu.ac.in", "99220042134@klu.ac.in",
+  "9921004545@klu.ac.in", "9921004599@klu.ac.in", "99220041028@klu.ac.in", "9922005348@klu.ac.in",
+  "99220041285@klu.ac.in" , "99220040802@klu.ac.in" ,"99220040773@klu.ac.in",
+  "99220041851@klu.ac.in" , "chevuricsdhanush@gmail.com"
+];
+
 
 
 function Hack() {
@@ -25,6 +46,7 @@ function Hack() {
   const [errorMessage, setErrorMessage] = useState("");
   const [activeFilter, setActiveFilter] = useState('all');
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [emailshowModal, emailsetShowModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showSignInModal, setShowSignInModal] = useState(false);
 
@@ -140,6 +162,11 @@ function Hack() {
     if (!user) {
       // User is not signed in, prompt them to sign in
       setShowSignInModal(true);
+      return;
+    }
+
+    if (!emails.includes(user.email)) {
+      emailsetShowModal(true);
       return;
     }
 
@@ -306,9 +333,7 @@ function Hack() {
 
   if (loading) {
     return (
-      <div className="loading-container">
-        <p>Loading problem statements...</p>
-      </div>
+      <LoadingScreen/>
     );
   }
 
@@ -719,6 +744,19 @@ function Hack() {
               />
 
               <EnhancedProblemCard
+                category="Web_App Development"
+                problemId="Multi_Stop_Delivery_Planner_for_E-Commerce"
+                title="Multi-Stop Delivery Planner for E-Commerce"
+                description="E-commerce logistics face challenges in optimizing multiple deliveries, leading to inefficient routes, delays, and increased fuel costs. Customers also lack flexibility in scheduling deliveries, while delivery agents struggle with poorly optimized routes."
+                tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
+                teamCount={data.Problems["Web_App Development"]?.["Multi_Stop_Delivery_Planner_for_E-Commerce"]?.teamCount || 0}
+                maxTeams={2}
+                onSelect={() => handleSelectProblem("Web_App Development", "Multi_Stop_Delivery_Planner_for_E-Commerce")}
+                onDeselect={deselectProblem}
+                userSelection={userSelection}
+              />
+
+              <EnhancedProblemCard
                 category="Web/App Development"
                 problemId="Blogging_Platform_SEO"
                 title="Build a Simple Blogging Platform with SEO Optimization"
@@ -920,6 +958,20 @@ function Hack() {
           </Button>
           <Button variant="danger" onClick={enterFullscreen}>
             Unselect
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+      {/* Not Eligible Modal */}
+      <Modal show={emailshowModal} onHide={() => emailsetShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Not Allowed</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Your Not Eligible to participate in this Event</Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={() => emailsetShowModal(false)}>
+            Ok
           </Button>
         </Modal.Footer>
       </Modal>
