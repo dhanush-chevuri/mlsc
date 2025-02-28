@@ -44,7 +44,7 @@ function Hack() {
       AI: {},
       "Data Science": {},
       Cybersecurity: {},
-      "Web/App Development": {}
+      "Web_App Development": {}
     }
   });
   const [loading, setLoading] = useState(true);
@@ -326,7 +326,7 @@ function Hack() {
   const aiCount = getCountByCategory("AI");
   const dataCount = getCountByCategory("Data Science");
   const securityCount = getCountByCategory("Cybersecurity");
-  const webCount = getCountByCategory("Web/App Development");
+  const webCount = getCountByCategory("Web_App Development");
 
   return (
     <div className="App">
@@ -456,10 +456,10 @@ function Hack() {
               category="cybersecurity"
             />
             <DomainCard
-              title="Web/App Development"
+              title="Web_App Development"
               description="Create innovative web applications and mobile apps that solve real-world problems and provide seamless user experiences."
               problemCount={webCount}
-              category="Web/App Development"
+              category="Web_App Development"
             />
           </div>
         </section>
@@ -702,16 +702,16 @@ function Hack() {
             </div>
           </div>
 
-          <div id="Web/App Development">
+          <div id="Web_App Development">
             <h3>Web/App Development</h3>
             <div className="problems-list">
               <EnhancedProblemCard
-                category="Web/App Development"
+                category="Web_App Development"
                 problemId="Real_Time_Collaborative_Whiteboard"
                 title="Real-Time Collaborative Whiteboard"
                 description="Create a real-time collaborative whiteboard using WebSockets. Multiple users can collaboratively draw, add sticky notes, and chat. Develop a real-time, multi-user collaborative whiteboard that enables teams and educators to brainstorm, teach, and work together efficiently without lag."
                 tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
-                teamCount={data.Problems["Web/App Development"]?.["Real_Time_Collaborative_Whiteboard"]?.teamCount || 0}
+                teamCount={data.Problems["Web_App Development"]?.["Real_Time_Collaborative_Whiteboard"]?.teamCount || 0}
                 maxTeams={2}
                 onSelect={() => handleSelectProblem("Web/App Development", "Real_Time_Collaborative_Whiteboard")}
                 onDeselect={deselectProblem}
@@ -810,27 +810,27 @@ function Hack() {
               />
 
               <EnhancedProblemCard
-                category="Web/App Development"
+                category="Web_App Development"
                 problemId="Create_a _logging_Platform"
                 title="Create a Blogging Platform"
                 description="A blogging platform allows users to write, comment, and interact with posts,necessitating both user-friendly front-end and scalable back-end development."
                 tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
-                teamCount={data.Problems["Web/App Development"]?.["Create_a _logging_Platform"]?.teamCount || 0}
+                teamCount={data.Problems["Web_App Development"]?.["Create_a _logging_Platform"]?.teamCount || 0}
                 maxTeams={2}
-                onSelect={() => handleSelectProblem("Web/App Development", "Create_a _logging_Platform")}
+                onSelect={() => handleSelectProblem("Web_App Development", "Create_a _logging_Platform")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
               />
 
               <EnhancedProblemCard
-                category="Web/App Development"
+                category="Web_App Development"
                 problemId="Sustainable_E_Commerce_for_Second_Hand_Goods"
                 title="Sustainable E-Commerce for Second-Hand Goods"
                 description="Develop an eco-friendly e-commerce platform for buying and selling second-hand goods while promoting sustainability awareness through eco-scores and responsible logistics."
                 tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
-                teamCount={data.Problems["Web/App Development"]?.["Sustainable_E_Commerce_for_Second_Hand_Goods"]?.teamCount || 0}
+                teamCount={data.Problems["Web_App Development"]?.["Sustainable_E_Commerce_for_Second_Hand_Goods"]?.teamCount || 0}
                 maxTeams={2}
-                onSelect={() => handleSelectProblem("Web/App Development", "Sustainable_E_Commerce_for_Second_Hand_Goods")}
+                onSelect={() => handleSelectProblem("Web_App Development", "Sustainable_E_Commerce_for_Second_Hand_Goods")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
               />
