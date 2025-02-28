@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Admin from './Admin';
 
 import Home from "./Hack"
+import ProtectedRoute from './ProtectedRoute';
 
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
           <Route path="/home" element={ <Home />} />
 
 
-          <Route path="/admin" element={<Admin/>} />
+          <Route path="/admin" element={ <ProtectedRoute><Admin/></ProtectedRoute> } />
 
 
           {/* Redirect all other routes to /dashboard if user is not logged in */}
