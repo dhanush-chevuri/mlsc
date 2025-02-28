@@ -9,10 +9,11 @@ import ProtectedRoute from './ProtectedRoute';
 function App() {
 
   return (
-      <Router>
-        <Routes>
+      <Router basename='mlsc'>
+        <Routes >
           {/* Public Routes: Accessible when the user is not authenticated */}
           <Route path="/home" element={ <Home />} />
+          <Route path="/" element={ <Home />} />
 
 
           <Route path="/admin" element={ <ProtectedRoute><Admin/></ProtectedRoute> } />

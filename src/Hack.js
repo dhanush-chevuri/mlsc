@@ -873,20 +873,6 @@ function Hack() {
                 userSelection={userSelection}
               />
 
-              <EnhancedProblemCard
-                category="Web_App Development"
-                problemId="Multi_Stop_Delivery_Planner_for_E-Commerce"
-                title="Multi-Stop Delivery Planner for E-Commerce"
-                description="E-commerce logistics face challenges in optimizing multiple deliveries, leading to inefficient routes, delays, and increased fuel costs. Customers also lack flexibility in scheduling deliveries, while delivery agents struggle with poorly optimized routes."
-                tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
-                teamCount={data.Problems["Web_App Development"]?.["Multi_Stop_Delivery_Planner_for_E-Commerce"]?.teamCount || 0}
-                maxTeams={2}
-                onSelect={() => handleSelectProblem("Web_App Development", "Multi_Stop_Delivery_Planner_for_E-Commerce")}
-                onDeselect={deselectProblem}
-                userSelection={userSelection}
-              />
-
-
               {/* Add remaining problem cards in this section */}
             </div>
           </div>
