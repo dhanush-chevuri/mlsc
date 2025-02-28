@@ -547,49 +547,49 @@ function Hack() {
 
               <EnhancedProblemCard
                 category="AI"
-                problemId="Personalized Education Path Recommendation"
+                problemId="Personalized_Education_Path_Recommendation"
                 title="Personalized Education Path Recommendation"
                 description="Create a system to recommend personalized education paths for students based on their learning styles, strengths, and career goals. The system should analyze student performance and provide tailored course suggestions."
                 tags={['Python', 'Pandas/NumPy', 'GraphDB/Neo4j']}
-                teamCount={data.Problems.AI["02VI"]?.teamCount || 0}
+                teamCount={data.Problems.AI["Personalized_Education_Path_Recommendation"]?.teamCount || 0}
                 maxTeams={3}
-                onSelect={() => handleSelectProblem("AI", "02VI")}
+                onSelect={() => handleSelectProblem("AI", "Personalized_Education_Path_Recommendation")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
               />
               <EnhancedProblemCard
                 category="AI"
-                problemId="AI-Powered Chatbot for Tax Assistance and Personalized Guidance"
+                problemId="AI_Powered_Chatbot_for_Tax_Assistance_and_Personalized_Guidance"
                 title="AI-Powered Chatbot for Tax Assistance and Personalized Guidance"
                 description=" Create an AI chatbot that provides personalized tax assistance to users. The chatbot should answer tax-related questions, guide users through filing procedures, and suggest relevant deductions and credits based on their individual circumstances."
                 tags={['Python', 'Rasa/Dialogflow', 'spaCy/NLTK']}
-                teamCount={data.Problems.AI["02VI"]?.teamCount || 0}
+                teamCount={data.Problems.AI["AI_Powered_Chatbot_for_Tax_Assistance_and_Personalized_Guidance"]?.teamCount || 0}
                 maxTeams={3}
-                onSelect={() => handleSelectProblem("AI", "02VI")}
+                onSelect={() => handleSelectProblem("AI", "AI_Powered_Chatbot_for_Tax_Assistance_and_Personalized_Guidance")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
               />
               <EnhancedProblemCard
                 category="AI"
-                problemId="AI-Driven Solutions for Real-World Challenges in Healthcare and Agriculture"
+                problemId="AI_Driven_Solutions_for_Real_World_Challenges_in_Healthcare_and_Agriculture"
                 title="AI-Driven Solutions for Real-World Challenges in Healthcare and Agriculture"
                 description="Innovative AI implementations using TensorFlow, PyTorch, OpenCV, or other frameworks to solve domain-specific problems.Integration of AI with IoT, cloud computing, and edge AI for real-time decision-making.User-friendly interfaces for easy adoption in healthcare and farming communities.Scalability and feasibility for large-scale deployments."
                 tags={['Python', 'TensorFlow/PyTorch', 'OpenCV']}
-                teamCount={data.Problems.AI["02VI"]?.teamCount || 0}
+                teamCount={data.Problems.AI["AI_Driven_Solutions_for_Real_World_Challenges_in_Healthcare_and_Agriculture"]?.teamCount || 0}
                 maxTeams={3}
-                onSelect={() => handleSelectProblem("AI", "02VI")}
+                onSelect={() => handleSelectProblem("AI", "AI_Driven_Solutions_for_Real_World_Challenges_in_Healthcare_and_Agriculture")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
               />
               <EnhancedProblemCard
                 category="AI"
-                problemId="AI-Powered Safety Gear Compliance Monitor"
+                problemId="AI_Powered_Safety_Gear_Compliance_Monitor"
                 title="AI-Powered Safety Gear Compliance Monitor"
                 description="Design a system that automatically monitors worker compliance with safety gear regulations. This system should use computer vision to detect whether workers are wearing required equipment (helmets, vests, etc.), providing real-time alerts for non-compliance."
                 tags={['Python', ' OpenCV', 'TensorFlow/PyTorch']}
-                teamCount={data.Problems.AI["02VI"]?.teamCount || 0}
+                teamCount={data.Problems.AI["AI_Powered_Safety_Gear_Compliance_Monitor"]?.teamCount || 0}
                 maxTeams={3}
-                onSelect={() => handleSelectProblem("AI", "02VI")}
+                onSelect={() => handleSelectProblem("AI", "AI_Powered_Safety_Gear_Compliance_Monitor")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
               />
@@ -811,26 +811,26 @@ function Hack() {
 
               <EnhancedProblemCard
                 category="Web/App Development"
-                problemId="Create a Blogging Platform"
+                problemId="Create_a _logging_Platform"
                 title="Create a Blogging Platform"
                 description="A blogging platform allows users to write, comment, and interact with posts,necessitating both user-friendly front-end and scalable back-end development."
                 tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
-                teamCount={data.Problems["Web/App Development"]?.["01RCW"]?.teamCount || 0}
+                teamCount={data.Problems["Web/App Development"]?.["Create_a _logging_Platform"]?.teamCount || 0}
                 maxTeams={3}
-                onSelect={() => handleSelectProblem("Web/App Development", "01RCW")}
+                onSelect={() => handleSelectProblem("Web/App Development", "Create_a _logging_Platform")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
               />
 
               <EnhancedProblemCard
                 category="Web/App Development"
-                problemId="Sustainable E-Commerce for Second-Hand Goods"
+                problemId="Sustainable_E_Commerce_for_Second_Hand_Goods"
                 title="Sustainable E-Commerce for Second-Hand Goods"
                 description="Develop an eco-friendly e-commerce platform for buying and selling second-hand goods while promoting sustainability awareness through eco-scores and responsible logistics."
                 tags={['React.js/Next.js', 'PostgreSQL/Firebase', 'WebSockets']}
-                teamCount={data.Problems["Web/App Development"]?.["01RCW"]?.teamCount || 0}
+                teamCount={data.Problems["Web/App Development"]?.["Sustainable_E_Commerce_for_Second_Hand_Goods"]?.teamCount || 0}
                 maxTeams={3}
-                onSelect={() => handleSelectProblem("Web/App Development", "01RCW")}
+                onSelect={() => handleSelectProblem("Web/App Development", "Sustainable_E_Commerce_for_Second_Hand_Goods")}
                 onDeselect={deselectProblem}
                 userSelection={userSelection}
               />
